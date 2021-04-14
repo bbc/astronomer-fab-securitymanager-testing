@@ -1,3 +1,7 @@
+> This has been forked from: https://github.com/bbc/astronomer-fab-securitymanager
+> And modified so that it works with a jwt from a cookie, and a signing secret from AWS secrets manager.
+> This has been tested on Airflow v2.0.1
+
 # astronomer-fab-securitymanager
 
 A custom Flask-AppBuilder security manager for use with [Apache
@@ -41,9 +45,9 @@ will ensure that this file exists to edit it.
 
 ## Settings
 
-This class uses Airflow's config mechanism under the `astronomer` section. The
+This class uses Airflow's config mechanism under the `auth` section. The
 easiest way of setting this is via environment variables prefixed with
-`AIRFLOW__ASTRONOMER__`
+`AIRFLOW__AUTH__`
 
 For a list of current settings check out the inline documentation in
 [security.py](astronomer/flask_appbuilder/security.py)
