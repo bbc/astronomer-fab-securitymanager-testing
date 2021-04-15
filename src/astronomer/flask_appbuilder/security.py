@@ -150,13 +150,14 @@ class AstroSecurityManagerMixin(object):
             user = self.find_user(username=claims['sub'])
 
             email = claims['sub']
+            # For DAG level access, need a role per user
+            if self.find_role(email) is None:
+                self.create_user_role(email, self.default_role)
+
             if email in self.admin_users:
                 role_name = 'Admin'
             else:
                 role_name = email
-                # For DAG level access, need a role per user
-                if self.find_role(role_name) is None:
-                    self.create_user_role(role_name, self.default_role)
 
             if user is None:
                 log.info('Creating airflow user details for %s from JWT', claims['sub'])
