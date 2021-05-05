@@ -260,21 +260,33 @@ class AirflowAstroSecurityManager(AstroSecurityManagerMixin, AirflowSecurityMana
             'allowed_audience': conf.get('auth', 'jwt_audience'),
             'jwt_cookie_name': conf.get('auth', 'jwt_cookie_name'),
             'jwt_aws_secret_path': conf.get('auth', 'jwt_aws_secret_path'),
-            'jwt_secret_override': conf.get('auth', 'jwt_secret_override'),
             'default_role': conf.get('auth', 'default_role'),
             'admin_users': admin_users,
             'roles_to_manage': EXISTING_ROLES,
         }
 
+        # optional kwargs
         # Airflow 1.10.2 doesn't have `fallback` support yet
-        try:
-           leeway = conf.get('astronomer', 'jwt_validity_leeway', fallback=None)
-           if leeway is not None:
-               kwargs['validity_leeway'] = int(leeway)
-        except AirflowConfigException:
-           pass
+        leeway = self.safe_get_config('astronomer', 'jwt_validity_leeway', fallback=None)
+        if leeway is not None:
+            kwargs['validity_leeway'] = int(leeway)
+        kwargs['jwt_secret_override'] = self.safe_get_config('auth', 'jwt_secret_override', fallback=None)
 
         super().__init__(**kwargs)
+
+    def safe_get_config(self, section, key, fallback):
+        # Airflow 1.10.2 doesn't have `fallback` support yet
+        from airflow.configuration import conf
+        from airflow.configuration import AirflowConfigException
+        val = None
+        try:
+            val = conf.get('astronomer', 'jwt_validity_leeway', fallback=None)
+        except AirflowConfigException:
+            pass
+        if val is not None:
+            return val
+        else:
+            return fallback
 
     def before_request(self):
         # To avoid making lots of stat requests don't do this for static
