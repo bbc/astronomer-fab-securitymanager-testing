@@ -14,7 +14,6 @@
 import json
 from logging import getLogger
 
-from airflow.security import permissions
 from flask import abort, request
 from flask_appbuilder.security.manager import AUTH_REMOTE_USER
 from flask_appbuilder.security.views import AuthView, expose
