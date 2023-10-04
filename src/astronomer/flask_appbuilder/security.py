@@ -301,10 +301,10 @@ class AirflowAstroSecurityManager(AstroSecurityManagerMixin, AirflowSecurityMana
         if base_role:
             log.info(f"this is the base role: {base_role}")
             log.info(f"base_role.permissions: {base_role.permissions}")
-            log.info(f"permissions type: {type(base_role.permissions)}")
+            log.info(f"permissions type: {[perm_view.__dict__ for perm_view in base_role.permissions]}")
 
             perms = set(
-                {(perm_view.permission_name.name, perm_view.view_menu.name) for perm_view in base_role.permissions}
+                {(perm_view.permission.name, perm_view.view_menu.name) for perm_view in base_role.permissions}
             )
         else:
             log.warning(f"Base role doesn't exist: {base_role_name}")
