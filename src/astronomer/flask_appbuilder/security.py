@@ -301,8 +301,8 @@ class AirflowAstroSecurityManager(AstroSecurityManagerMixin, AirflowSecurityMana
         if base_role:
             log.info(f"this is the base role: {base_role}")
             log.info(f"base_role.permissions: {base_role.permissions}")
-            log.info(f"perm_view info: {[perm_view for perm_view in base_role.permissions]}")
-            
+            log.info(f"permissions type: {type(base_role.permissions)}")
+
             perms = set(
                 {(perm_view.permission.name, perm_view.view_menu.name) for perm_view in base_role.permissions}
             )
