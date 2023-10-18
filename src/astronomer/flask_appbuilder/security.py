@@ -299,12 +299,10 @@ class AirflowAstroSecurityManager(AstroSecurityManagerMixin, AirflowSecurityMana
         """ Create a role with blank permissions"""
         base_role = self.find_role(base_role_name)
         if base_role:
-            log.info(f"this is the base role: {base_role}")
             log.info(f"base_role.permissions: {base_role.permissions}")
-            log.info(f"permissions dir: {[dir(perm_view) for perm_view in base_role.permissions]}")
 
             perms = set(
-                {(perm_view.permission.name, perm_view.view_menu.name) for perm_view in base_role.permissions}
+                {(perm_view.action.name, perm_view.resource.name) for perm_view in base_role.permissions}
             )
         else:
             log.warning(f"Base role doesn't exist: {base_role_name}")
